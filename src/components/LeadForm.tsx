@@ -135,7 +135,13 @@ export function LeadForm() {
       submittedAt: new Date().toISOString(),
     });
 
-    const bookingUrl = getBookingRedirect(`${details.firstName} ${details.lastName}`, details.email);
+const bookingUrl = getBookingRedirect(
+  `${details.firstName} ${details.lastName}`,
+  details.email,
+  leadType,
+  cleanAnswers(answers),
+  details.phone,
+);
     if (bookingUrl) {
       window.location.assign(bookingUrl);
       return;
