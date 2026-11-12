@@ -3,7 +3,7 @@ export const NOINDEX = true;
 // Leave empty to skip the webhook request silently.
 export const WEBHOOK_URL = '';
 // Leave empty to send visitors to the confirmation page instead.
-export const BOOKING_URL = '';
+export const BOOKING_URL = 'https://cal.com/amaan-hussain-l2wbqq/mitchell';
 
 export const AGENT = {
   name: 'Sarah Mitchell',
