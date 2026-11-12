@@ -31,10 +31,42 @@ export async function submitLead(payload: LeadPayload): Promise<void> {
   ]);
 }
 
-export function getBookingRedirect(name: string, email: string): string | null {
+function buildNotes(leadType: LeadType, answers: Answers): string {
+  const parts: string[] = [];
+
+  if (leadType === 'sell') {
+    const property = answers.address ? `my property at ${answers.address}` : 'my home';
+    let sentence = `Thinking of selling ${property}`;
+    if (answers.timeline) sentence += `, likely in ${answers.timeline.toLowerCase()}`;
+    if (answers.reason) sentence += ` (${answers.reason.toLowerCase()})`;
+    if (answers.priceExpectation) sentence += `. Hoping for around ${answers.priceExpectation}`;
+    parts.push(sentence + '.');
+  } else {
+    const where = answers.area ? `in ${answers.area}` : 'in the area';
+    let sentence = `Looking to buy ${where}`;
+    if (answers.budget) sentence += `, budget ${answers.budget}`;
+    if (answers.timeline) sentence += `, hoping to move ${answers.timeline.toLowerCase()}`;
+    if (answers.preApproval === 'Yes') sentence += '. Already pre-approved';
+    else if (answers.preApproval === 'In progress') sentence += '. Pre-approval in progress';
+    else if (answers.preApproval === 'Not yet') sentence += '. Not yet pre-approved';
+    parts.push(sentence + '.');
+  }
+
+  return parts.join(' ');
+}
+
+export function getBookingRedirect(
+  name: string,
+  email: string,
+  leadType: LeadType,
+  answers: Answers,
+  phone: string,
+): string | null {
   if (!BOOKING_URL) return null;
   const url = new URL(BOOKING_URL);
   url.searchParams.set('name', name);
   url.searchParams.set('email', email);
+  url.searchParams.set('notes', buildNotes(leadType, answers));
+  url.searchParams.set('attendeePhoneNumber', phone);
   return url.toString();
 }
