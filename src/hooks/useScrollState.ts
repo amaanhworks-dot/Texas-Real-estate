@@ -14,7 +14,7 @@ export function useScrolledPast(threshold: number) {
 }
 
 export function useElementInView(id: string) {
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(true);
 
   useEffect(() => {
     const el = document.getElementById(id);
